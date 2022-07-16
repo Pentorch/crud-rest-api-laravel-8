@@ -103,7 +103,29 @@ class MahasiswaController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try {
+            $request->validate([
+                'username' => 'required',
+                'address' => 'required'
+            ]);
+
+            $mahasiswa  =  Mahasiswa::findOrFail($id);
+
+            $mahasiswa->update([
+                'username' => $request->username,
+                'address' => $request->address
+            ]);
+
+            $data = Mahasiswa::where('id','=',$mahasiswa->id)->get();
+
+            if($data){
+            return ApiFormatter::createApi(200, 'Success', $data);
+        }else{
+            return ApiFormatter::createApi(404, 'Data Not Found', null);
+        }
+        } catch (\Exception $error) {
+            return ApiFormatter::createApi(400,'Failed');
+        }
     }
 
     /**
