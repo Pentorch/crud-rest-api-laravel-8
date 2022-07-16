@@ -43,7 +43,27 @@ class MahasiswaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $request->validate([
+                'username' => 'required',
+                'address' => 'required'
+            ]);
+
+            $mahasiswa = Mahasiswa::create([
+                'username' => $request->username,
+                'address' => $request->address
+            ]);
+
+            $data = Mahasiswa::where('id','=',$mahasiswa->id)->get();
+
+            if($data){
+            return ApiFormatter::createApi(200, 'Success', $data);
+        }else{
+            return ApiFormatter::createApi(404, 'Data Not Found', null);
+        }
+        } catch (\Exception $error) {
+            return ApiFormatter::createApi(400,'Failed');
+        }
     }
 
     /**
@@ -54,7 +74,13 @@ class MahasiswaController extends Controller
      */
     public function show($id)
     {
-        //
+        $data = Mahasiswa::where('id','=',$id)->get();
+
+            if($data){
+            return ApiFormatter::createApi(200, 'Success', $data);
+        }else{
+            return ApiFormatter::createApi(404, 'Data Not Found', null);
+        }
     }
 
     /**
