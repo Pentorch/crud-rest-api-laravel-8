@@ -13,7 +13,6 @@ class ApiFormatter {
         self::$response['code'] = $code;
         self::$response['message'] = $message;
         self::$response['data'] = $data;
-        return self::$response;
 
         return response()->json(self::$response,self::$response['code']);
     }
